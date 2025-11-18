@@ -6,7 +6,7 @@ app = Flask(__name__, template_folder="templates")
 
 
 # Dossier où les uploads seront stockées
-upload_folder = os.path.join('static', 'uploads')
+upload_folder = os.path.join('static', 'images')
  
 app.config['UPLOAD_FOLDER'] = upload_folder
 
