@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Rendering Dynamic Images Using Flask</title>
+    <title>Image + Story Generator</title>
 </head>
+
 <body>
-<form action="{{ url_for('upload_file') }}" enctype="multipart/form-data" method="POST">
-    <input name="img" type="file"/>
-    <input type="submit"/>
-</form>
- 
-{% if img %}
-<h1>Rendered Image</h1>
-<img src="{{img}}">
-{% else %}
-<h1>Image will be render here...</h1>
-{% endif %}
+    <form action="/" enctype="multipart/form-data" method="POST">
+        <input name="img" type="file" />
+        <input type="submit" value="Envoyer" />
+    </form>
+
+    {% if img %}
+    <h2>Image envoyée :</h2>
+    <img src="{{ img }}" width="300">
+
+    {% endif %}
+
+    {% if story %}
+    <h2>Histoire générée :</h2>
+    <p>{{ story }}</p>
+    {% endif %}
+
 </body>
+
 </html>

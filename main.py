@@ -1,6 +1,10 @@
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
 import os
+import ollama
+# from PIL import Image
+import io
+import base64
 
 app = Flask(__name__, template_folder="templates")
 
@@ -32,11 +36,30 @@ def upload_file():
     # Sauvegarde de l'image
     file.save(filepath)
 
-    # On renvoie la même page mais avec l'image
-    # Flask sert automatiquement static/ donc on met le bon chemin
-    img_url = "/" + filepath
 
-    return render_template("image_render.html", img=img_url)
+
+    # Appel à Ollama → génération de l’histoire
+    
+    
+    with open(filepath, "rb") as img :
+        response = ollama.chat(
+        model='gemma3:4b',
+        messages=[{
+            'role': 'user',
+            'content': "Tu es expert en histoire pour les enfants. Raconte une brève histoire de 100 mots pour enfants inspirée de cette image",
+            'images': [img.read()],
+            },],
+        )
+    app.logger.info(response)
+    story = response['message']['content']
+    # return render_template("image_render.html", img=filepath, story=story)
+
+
+    # # On renvoie la même page mais avec l'image
+    # # Flask sert automatiquement static/ donc on met le bon chemin
+    # img_url = "/" + filepath
+
+    return render_template("image_render.html", story=story)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
