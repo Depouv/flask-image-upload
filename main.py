@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 import os
 import ollama
 # from PIL import Image
-import io
+# import requests
 import base64
 
 app = Flask(__name__, template_folder="templates")
@@ -35,14 +35,16 @@ def upload_file():
 
     # Sauvegarde de l'image
     file.save(filepath)
-
+    
+    client = ollama.Client(
+    host='http://ollama:11434/',
+    headers={'x-some-header': 'some-value'}
+)
 
 
     # Appel à Ollama → génération de l’histoire
-    
-    
     with open(filepath, "rb") as img :
-        response = ollama.chat(
+        response = client.chat(
         model='gemma3:4b',
         messages=[{
             'role': 'user',
@@ -51,6 +53,17 @@ def upload_file():
             },],
         )
     app.logger.info(response)
+
+    #     url = "http://ollama:11434/api/chat"
+    #     data = {
+    #     "model": "gemma3:4b",
+    #     "prompt": "Tu es expert en histoire pour les enfants. Raconte une brève histoire de 100 mots pour enfants inspirée de cette image",
+    #     "images": [img.read()],
+    #     "stream": False
+    #     }
+
+    # response = requests.post(url, json=data)
+
     story = response['message']['content']
     # return render_template("image_render.html", img=filepath, story=story)
 
