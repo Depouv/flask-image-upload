@@ -43,36 +43,42 @@ def upload_file():
 
 
     # Appel à Ollama → génération de l’histoire
-    with open(filepath, "rb") as img :
-        response = client.chat(
-        model='gemma3:4b',
-        messages=[{
-            'role': 'user',
-            'content': "Tu es expert en histoire pour les enfants. Raconte une brève histoire de 100 mots pour enfants inspirée de cette image",
-            'images': [img.read()],
-            },],
-        )
-    app.logger.info(response)
+    if True:
+        with open(filepath, "rb") as img :
+            response = client.chat(
+            model='gemma3:4b',
+            messages=[{
+                'role': 'user',
+                'content': "Tu es expert en histoire pour les enfants. Raconte une brève histoire de 100 mots pour enfants inspirée de cette image. N'invente pas !",
+                'images': [img.read()],
+                },],
+            )
 
-    #     url = "http://ollama:11434/api/chat"
-    #     data = {
-    #     "model": "gemma3:4b",
-    #     "prompt": "Tu es expert en histoire pour les enfants. Raconte une brève histoire de 100 mots pour enfants inspirée de cette image",
-    #     "images": [img.read()],
-    #     "stream": False
-    #     }
 
-    # response = requests.post(url, json=data)
+        app.logger.info(response)
 
-    story = response['message']['content']
-    # return render_template("image_render.html", img=filepath, story=story)
+        #     url = "http://ollama:11434/api/chat"
+        #     data = {
+        #     "model": "gemma3:4b",
+        #     "prompt": "Tu es expert en histoire pour les enfants. Raconte une brève histoire de 100 mots pour enfants inspirée de cette image",
+        #     "images": [img.read()],
+        #     "stream": False
+        #     }
+
+        # response = requests.post(url, json=data)
+    
+
+        story = response['message']['content']
+   
+
+    return render_template("image_render.html", img=filepath, story=story)
 
 
     # # On renvoie la même page mais avec l'image
     # # Flask sert automatiquement static/ donc on met le bon chemin
     # img_url = "/" + filepath
 
-    return render_template("image_render.html", story=story)
+    return render_template("image_render.html",img=filepath, story=story)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

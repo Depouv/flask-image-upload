@@ -10,7 +10,7 @@ ENV PYTHONUNBUFFERED=1
 # Étape 3 : dossier de travail dans le container
 WORKDIR /app
 
-# Étape 4 : copier pyprojet 
+# Étape 4 : copier pyproject 
 COPY pyproject.toml .
 
 
@@ -23,8 +23,8 @@ COPY . .
 # Étape 6 : exposer le port Flask
 EXPOSE 5000
 
-# Étape 7 : commande pour démarrer l'application avec uvicorn
-# Ici "main:app" car ton fichier s'appelle main.py et contient app = Flask(...)
+# Étape 7 : commande pour démarrer l'application avec uv
+
 CMD ["uv","run", "main.py"]
 
 
